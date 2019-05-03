@@ -53,7 +53,7 @@ static int skip_atoi(const char **s)
 	int i=0;
 
 	while (is_digit(**s))
-		i = i*10 + *((*s)++) - '0';									// *((*s)++) ==>s[0][i]++ == s[0][i+1]
+		i = i*10 + *((*s)++) - '0';			// *((*s)++) ==>s[0][i]++ == s[0][i+1]
 	return i;
 }
 //给相应的类型复制，后面读取到相应的二进制就给对应？赋予该类型
@@ -81,32 +81,32 @@ static char * number(char * str, int num, int base, int size, int precision
 	int i;
 
 	if (type&SMALL) digits="0123456789abcdefghijklmnopqrstuvwxyz"; 	// 是否是小写
-	if (type&LEFT) type &= ~ZEROPAD; 								// 左对齐是填写‘0’
-	if (base<2 || base>36) 											// 判断进制
+	if (type&LEFT) type &= ~ZEROPAD; 			// 左对齐是填写‘0’
+	if (base<2 || base>36) 						// 判断进制
 		return 0;
-	c = (type & ZEROPAD) ? '0' : ' ' ;								// 补 ‘0’ 还是空格
-	if (type&SIGN && num<0) {  										// 负数输出
+	c = (type & ZEROPAD) ? '0' : ' ' ;			// 补 ‘0’ 还是空格
+	if (type&SIGN && num<0) {  					// 负数输出
 		sign='-';
 		num = -num;  
 	} else
 		sign=(type&PLUS) ? '+' : ((type&SPACE) ? ' ' : 0);  		// 正数
-	if (sign) size--; 												// 判断是否带有符号是的话就-1
-	if (type&SPECIAL) 												// 判断是否有转换限定符
-		if (base==16) size -= 2; 									// 16进制-2
-		else if (base==8) size--; 									// 8进制-1
+	if (sign) size--; 							// 判断是否带有符号是的话就-1
+	if (type&SPECIAL) 							// 判断是否有转换限定符
+		if (base==16) size -= 2; 			    // 16进制-2
+		else if (base==8) size--; 				// 8进制-1
 	i=0;
-	if (num==0) 													// 0 的输出
+	if (num==0) 								// 0 的输出
 		tmp[i++]='0';
-	else while (num!=0) 											// 不是0的话就一直对num进行除法运算，余数写入tmp[]
+	else while (num!=0) 						// 不是0的话就一直对num进行除法运算，余数写入tmp[]
 		tmp[i++]=digits[do_div(num,base)];
-	if (i>precision) precision=i; 									// 精度  ：输出的位数
+	if (i>precision) precision=i; 				// 精度  ：输出的位数
 	size -= precision;     
-	if (!(type&(ZEROPAD+LEFT))) 									// 非补零和左对齐就用空格
+	if (!(type&(ZEROPAD+LEFT))) 			    // 非补零和左对齐就用空格
 		while(size-->0)
 			*str++ = ' ';
 	if (sign)
 		*str++ = sign;
-	if (type&SPECIAL) 												// 8进制和 16进制 前缀补0
+	if (type&SPECIAL) 							// 8进制和 16进制 前缀补0
 		if (base==8)
 			*str++ = '0';
 		else if (base==16) {
@@ -114,18 +114,18 @@ static char * number(char * str, int num, int base, int size, int precision
 			*str++ = digits[33];
 		}
 	if (!(type&LEFT)) // 
-		while(size-->0) 											// 当size大于0时循环，size进行自减运算
+		while(size-->0) 						// 当size大于0时循环，size进行自减运算
 			*str++ = c;
-	while(i<precision--) 											// 如果输出的小于精度 末尾 + 0
+	while(i<precision--) 						// 如果输出的小于精度 末尾 + 0
 		*str++ = '0';
-	while(i-->0) 													// 把数组tmp中的值从 i 开始赋值给str
+	while(i-->0) 								// 把数组tmp中的值从 i 开始赋值给str
 		*str++ = tmp[i];
-	while(size-->0) 												// 如果没有达到设定的宽度 ，就补空格
+	while(size-->0) 							// 如果没有达到设定的宽度 ，就补空格
 		*str++ = ' ';
 	return str;
 }
 
-int vsprintf(char *buf, const char *fmt, va_list args)				// fmt格式说明符号，buf 带写入数据
+int vsprintf(char *buf, const char *fmt, va_list args)	// fmt格式说明符号，buf 带写入数据
 {
 	int len;
 	int i;
@@ -289,4 +289,3 @@ int sprintf(char * buf, const char *fmt, ...)
 	va_end(args);
 	return i;
 }
-
