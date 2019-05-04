@@ -81,7 +81,7 @@ static char * number(char * str, int num, int base, int size, int precision
 	int i;
 
 	if (type&SMALL) digits="0123456789abcdefghijklmnopqrstuvwxyz"; 	// 是否是小写
-	if (type&LEFT) type &= ~ZEROPAD; 			// 左对齐是填写‘0’
+	if (type&LEFT) type &= ~ZEROPAD; 			// 如果是左对齐，先对ZEROPAD按位取反，然后type与它按位与运算。
 	if (base<2 || base>36) 						// 判断进制
 		return 0;
 	c = (type & ZEROPAD) ? '0' : ' ' ;			// 补 ‘0’ 还是空格
